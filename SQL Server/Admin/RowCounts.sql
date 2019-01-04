@@ -15,3 +15,5 @@ FOR XML PATH(''), TYPE).value('.', 'varchar(max)'), 1, LEN(' UNION ALL '), ''));
 
 -- PRINT @SQL;
 EXEC (@SQL);
+
+SELECT SERVERNAME = @@SERVERNAME
