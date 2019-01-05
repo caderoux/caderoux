@@ -12,49 +12,38 @@ $res_code = $res_code -replace '\[', '' -replace '\]', '';
 $code = "$enl_code$res_code";
 "COMBINED CIPHERTEXT >> $code";
 
-$phonepad = @{
-    '2' = 'A';
-    '22' = 'B';
-    '222' = 'C';
-    '3' = 'D';
-    '33' = 'E';
-    '333' = 'F';
-    '4' = 'G';
-    '44' = 'H';
-    '444' = 'I';
-    '5' = 'J';
-    '55' = 'K';
-    '555' = 'L';
-    '6' = 'M';
-    '66' = 'N';
-    '666' = 'O';
-    '7' = 'P';
-    '77' = 'Q';
-    '777' = 'R';
-    '7777' = 'S';
-    '8' = 'T';
-    '88' = 'U';
-    '888' = 'V';
-    '9' = 'W';
-    '99' = 'X';
-    '999' = 'Y';
-    '9999' = 'Z';
-};
-
-$wordnumbers = @{
-    'ONE' = '1';
-    'TWO' = '2';
-    'THREE' = '3';
-    'FOUR' = '4';
-    'FIVE' = '5';
-    'SIX' = '6';
-    'SEVEN' = '7';
-    'EIGHT' = '8';
-    'NINE' = '9';
-};
-
 function Decode-PhonePad() {
     param($code);
+
+    $phonepad = @{
+        '2' = 'A';
+        '22' = 'B';
+        '222' = 'C';
+        '3' = 'D';
+        '33' = 'E';
+        '333' = 'F';
+        '4' = 'G';
+        '44' = 'H';
+        '444' = 'I';
+        '5' = 'J';
+        '55' = 'K';
+        '555' = 'L';
+        '6' = 'M';
+        '66' = 'N';
+        '666' = 'O';
+        '7' = 'P';
+        '77' = 'Q';
+        '777' = 'R';
+        '7777' = 'S';
+        '8' = 'T';
+        '88' = 'U';
+        '888' = 'V';
+        '9' = 'W';
+        '99' = 'X';
+        '999' = 'Y';
+        '9999' = 'Z';
+    };
+
     $chars = $code -split '\.'
     for ($lp = 0 ; $lp -lt $chars.Count ; $lp++) {
         $chars[$lp] = $phonepad[$chars[$lp]];
@@ -64,6 +53,18 @@ function Decode-PhonePad() {
 
 function Decode-WordNumbers() {
     param($code);
+    $wordnumbers = @{
+        'ONE' = '1';
+        'TWO' = '2';
+        'THREE' = '3';
+        'FOUR' = '4';
+        'FIVE' = '5';
+        'SIX' = '6';
+        'SEVEN' = '7';
+        'EIGHT' = '8';
+        'NINE' = '9';
+    };
+
     foreach($key in $wordnumbers.keys)
     {
         $code = $code -replace "$key", $wordnumbers[$key];
