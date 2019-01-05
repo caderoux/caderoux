@@ -38,9 +38,9 @@ function Decode-RemoveDelimiters() {
 
 function Decode-WordNumbers() {
     param($code);
+    $wordnumbers = @{ 'ONE' = '1'; 'TWO' = '2'; 'THREE' = '3'; 'FOUR' = '4'; 'FIVE' = '5'; 'SIX' = '6'; 'SEVEN' = '7'; 'EIGHT' = '8'; 'NINE' = '9'; };
 
-    @{ 'ONE' = '1'; 'TWO' = '2'; 'THREE' = '3'; 'FOUR' = '4'; 'FIVE' = '5'; 'SIX' = '6'; 'SEVEN' = '7'; 'EIGHT' = '8'; 'NINE' = '9'; } |
-        % { $code = $code -replace $_.Key, $_.Value };
+    $wordnumbers.keys | % { $code = $code -replace $_, $wordnumbers[$_] };
 
     $code;
 }
