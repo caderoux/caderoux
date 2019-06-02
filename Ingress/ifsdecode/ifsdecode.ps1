@@ -2,7 +2,8 @@
 
 Param(
 	[Parameter(Mandatory=$true)][String]$enl = '[7777.888.999.66.444.66.33.333.666.88.777.444.333.7]'
-	,[Parameter(Mandatory=$true)][String]$res = '[777.66.444.66.33.33.444.4.44.8.66.444.66.33.9999.22]'
+    ,[Parameter(Mandatory=$true)][String]$res = '[777.66.444.66.33.33.444.4.44.8.66.444.66.33.9999.22]'
+    ,[String]$hint = 'Phone Keyboard' # Phonetic
 )
 
 "ENL >> $enl";
@@ -30,6 +31,11 @@ function Decode-PhonePad() {
     ($code -split [regex]::Escape($delimiter) | % { $phonepad[$_] }) -join $delimiter;
 }
 
+function Decode-Phonetic() {
+    param($code)
+
+    $code -creplace '[a-z]', ''
+}
 function Decode-RemoveDelimiters() {
     param($code, $delimiter);
 
@@ -38,18 +44,27 @@ function Decode-RemoveDelimiters() {
 
 function Decode-WordNumbers() {
     param($code);
-    $wordnumbers = @{ 'ONE' = '1'; 'TWO' = '2'; 'THREE' = '3'; 'FOUR' = '4'; 'FIVE' = '5'; 'SIX' = '6'; 'SEVEN' = '7'; 'EIGHT' = '8'; 'NINE' = '9'; };
+    $wordnumbers = @{ 'ZERO' = '0'; 'ONE' = '1'; 'TWO' = '2'; 'THREE' = '3'; 'FOUR' = '4'; 'FIVE' = '5'; 'SIX' = '6'; 'SEVEN' = '7'; 'EIGHT' = '8'; 'NINE' = '9'; };
 
     $wordnumbers.keys | % { $code = $code -replace $_, $wordnumbers[$_] };
 
     $code;
 }
 
-$code = Decode-PhonePad -code $code -delimiter '.';
-"PLAINTEXT (PhonePad) >> $code";
-
-$code = Decode-RemoveDelimiters -code $code -delimiter '.';
-"PLAINTEXT (RemoveDelimiters) >> $code";
+if ( $hint -eq 'Phone Keyboard' ) {
+    $code = Decode-PhonePad -code $code -delimiter '.';
+    "PLAINTEXT (PhonePad) >> $code";
+    
+    $code = Decode-RemoveDelimiters -code $code -delimiter '.';
+    "PLAINTEXT (RemoveDelimiters) >> $code";
+}
+elseif ( $hint -eq 'Phonetic' ) {
+    $code = Decode-Phonetic -code $code;
+    "PLAINTEXT (Phonetic) >> $code";
+    
+    $code = Decode-RemoveDelimiters -code $code -delimiter ' ';
+    "PLAINTEXT (RemoveDelimiters) >> $code";
+}
 
 $code = Decode-WordNumbers -code $code;
 "PASSCODE >> $code";
