@@ -4,7 +4,7 @@ Param(
     [String]$hint = 'Hexadecimal' # Phone Keyboard, Phonetic, Hexadecimal
 	,[String]$enl = ''
     ,[String]$res = ''
-    ,[bool]$demo = $false
+    ,[switch]$demo = $false
 )
 
 $demos = @{
