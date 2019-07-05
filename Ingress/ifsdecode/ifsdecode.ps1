@@ -45,7 +45,7 @@ function Decode-PhonePad() {
 function Decode-Phonetic() {
     param($code)
 
-    $code -creplace '[a-z]', ''
+    $code -creplace '[a-z\-]', ''
 }
 
 function Decode-Hexadecimal() {
