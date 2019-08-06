@@ -10,12 +10,15 @@ Param(
 $demos = @{
     "Phone Keyboard" = @{ enl = '[7777.888.999.66.444.66.33.333.666.88.777.444.333.7]'; res = '[777.66.444.66.33.33.444.4.44.8.66.444.66.33.9999.22]'};
     "Phonetic" = @{ enl = '[Sierra Whiskey Hotel Sierra Echo Victor Echo November Tango Whiskey Oscar India Foxtrot Sierra Tango Whiskey Oscar Zulu Echo Romeo Oscar Oscar N]'; res = '[ovember Echo November India November Echo November India November Echo Echo India Golf Hotel Tango Sierra Echo Victor Echo November Kilo Foxtrot]'};
-    "Hexadecimal" = @{ enl = '[68:73:65:35:33:69:66:73:3]'; res = '[2:30:31:39:38:39:33:62:75]' }
+    "Hexadecimal" = @{ enl = '[68:73:65:35:33:69:66:73:3]'; res = '[2:30:31:39:38:39:33:62:75]' };
+    "Braille" = @{ enl = '⠙⠚⠋⠎⠑⠧⠑⠝⠎⠊⠭⠊⠋⠎⠞⠺⠕⠵⠑⠗⠕'; res = '⠕⠝⠑⠝⠊⠝⠑⠋⠊⠧⠑⠞⠺⠕⠑⠊⠛⠓⠞⠃⠟'};
 }
 
 if ( $demo ) {
     $enl, $res = $demos[$hint].enl, $demos[$hint].res
 }
+
+$OutputEncoding = [console]::InputEncoding = [console]::OutputEncoding = New-Object System.Text.UTF8Encoding
 
 "ENL >> $enl";
 "RES >> $res";
@@ -40,6 +43,23 @@ function Decode-PhonePad() {
     };
 
     ($code -split [regex]::Escape($delimiter) | % { $phonepad[$_] }) -join $delimiter;
+}
+
+function Decode-Braille() {
+    param($code);
+
+    $braille = @{
+        '⠁' = 'A'; '⠃' = 'B'; '⠉' = 'C';
+        '⠙' = 'D'; '⠑' = 'E'; '⠋' = 'F';
+        '⠛' = 'G'; '⠓' = 'H'; '⠊' = 'I';
+        '⠚' = 'J'; '⠅' = 'K'; '⠇' = 'L';
+        '⠍' = 'M'; '⠝' = 'N'; '⠕' = 'O';
+        '⠏' = 'P'; '⠟' = 'Q'; '⠗' = 'R'; '⠎' = 'S';
+        '⠞' = 'T'; '⠥' = 'U'; '⠧' = 'V';
+        '⠺' = 'W'; '⠭' = 'X'; '⠽' = 'Y'; '⠵' = 'Z';
+    };
+
+    ($code -split '' | % { $braille[$_] }) -join '';
 }
 
 function Decode-Phonetic() {
@@ -89,6 +109,10 @@ elseif ( $hint -eq 'Hexadecimal' ) {
     
     $code = Decode-RemoveDelimiters -code $code -delimiter ':';
     "PLAINTEXT (RemoveDelimiters) >> $code";
+}
+elseif ( $hint -eq 'Braille' ) {
+    $code = Decode-Braille -code $code;
+    "PLAINTEXT (Hexadecimal) >> $code";
 }
 
 $code = Decode-WordNumbers -code $code;
