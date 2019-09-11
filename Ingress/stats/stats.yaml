@@ -1,0 +1,32 @@
+caderoux:
+  {
+    date : '2019-05-31 20:10:41'
+  , ap : 257144547
+  , explorer : 14975
+  , seer : 484
+  , recon : 3118
+  , trekker : 8001
+  , builder : 470817
+  , connector : 63240
+  , mind-controller : 26940
+  , illuminator : 8214796
+  , recharger : 814945134
+  , pioneer : 7410
+  , engineer : 59874
+  , purifier : 458892
+  , guardian : 786
+  , specops : 589
+  , missionday : 10
+  , nl-1331-meetups : 1
+  , hacker : 443975
+  , translator : 317801
+  , sojourner : 1184
+  , recruiter : 0
+  , recursions : 0
+  , prime_challenge : 0
+  , stealth_ops : 0
+  , opr_live : 0
+  , ocf : 0
+  , intel_ops : 1
+  , ifs : 1
+  }
