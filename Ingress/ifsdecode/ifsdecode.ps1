@@ -1,17 +1,18 @@
 ﻿[CmdletBinding()]
 
 Param(
-    [String]$hint = 'Hexadecimal' # Phone Keyboard, Phonetic, Hexadecimal
+    [String]$hint = 'Hexadecimal' # Phone Keyboard, Phonetic, Hexadecimal, Braille, Decimal
 	,[String]$enl = ''
     ,[String]$res = ''
     ,[switch]$demo = $false
 )
 
 $demos = @{
-    "Phone Keyboard" = @{ enl = '[7777.888.999.66.444.66.33.333.666.88.777.444.333.7]'; res = '[777.66.444.66.33.33.444.4.44.8.66.444.66.33.9999.22]'};
-    "Phonetic" = @{ enl = '[Sierra Whiskey Hotel Sierra Echo Victor Echo November Tango Whiskey Oscar India Foxtrot Sierra Tango Whiskey Oscar Zulu Echo Romeo Oscar Oscar N]'; res = '[ovember Echo November India November Echo November India November Echo Echo India Golf Hotel Tango Sierra Echo Victor Echo November Kilo Foxtrot]'};
-    "Hexadecimal" = @{ enl = '[68:73:65:35:33:69:66:73:3]'; res = '[2:30:31:39:38:39:33:62:75]' };
-    "Braille" = @{ enl = '⠙⠚⠋⠎⠑⠧⠑⠝⠎⠊⠭⠊⠋⠎⠞⠺⠕⠵⠑⠗⠕'; res = '⠕⠝⠑⠝⠊⠝⠑⠋⠊⠧⠑⠞⠺⠕⠑⠊⠛⠓⠞⠃⠟'};
+    "Phone Keyboard" = @{ enl = '[7777.888.999.66.444.66.33.333.666.88.777.444.333.7]'; res = '[777.66.444.66.33.33.444.4.44.8.66.444.66.33.9999.22]'}
+    "Phonetic" = @{ enl = '[Sierra Whiskey Hotel Sierra Echo Victor Echo November Tango Whiskey Oscar India Foxtrot Sierra Tango Whiskey Oscar Zulu Echo Romeo Oscar Oscar N]'; res = '[ovember Echo November India November Echo November India November Echo Echo India Golf Hotel Tango Sierra Echo Victor Echo November Kilo Foxtrot]'}
+    "Hexadecimal" = @{ enl = '[68:73:65:35:33:69:66:73:3]'; res = '[2:30:31:39:38:39:33:62:75]' }
+    "Braille" = @{ enl = '⠙⠚⠋⠎⠑⠧⠑⠝⠎⠊⠭⠊⠋⠎⠞⠺⠕⠵⠑⠗⠕'; res = '⠕⠝⠑⠝⠊⠝⠑⠋⠊⠧⠑⠞⠺⠕⠑⠊⠛⠓⠞⠃⠟'}
+    "Decimal" = @{ enl = '[102.100.107.55.56.105.102.115]'; res = '[.50.48.49.57.52.53.54.113.110]' }
 }
 
 if ( $demo ) {
@@ -74,6 +75,12 @@ function Decode-Hexadecimal() {
     ($code -split [regex]::Escape($delimiter) | % { [char][byte]"0x$_" }) -join $delimiter;
 }
 
+function Decode-Decimal() {
+    param ($code, $delimiter)
+
+    ($code -split [regex]::Escape($delimiter) | % { [char][byte]"$_" }) -join $delimiter;
+}
+
 function Decode-RemoveDelimiters() {
     param($code, $delimiter);
 
@@ -113,6 +120,13 @@ elseif ( $hint -eq 'Hexadecimal' ) {
 elseif ( $hint -eq 'Braille' ) {
     $code = Decode-Braille -code $code;
     "PLAINTEXT (Hexadecimal) >> $code";
+}
+elseif ( $hint -eq 'Decimal' ) {
+    $code = Decode-Decimal -code $code -delimiter '.';
+    "PLAINTEXT (Decimal) >> $code";
+    
+    $code = Decode-RemoveDelimiters -code $code -delimiter '.';
+    "PLAINTEXT (RemoveDelimiters) >> $code";
 }
 
 $code = Decode-WordNumbers -code $code;
