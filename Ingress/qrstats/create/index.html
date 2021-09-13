@@ -134,26 +134,30 @@
             return (result[0]);
         }
 
+        function create(text) {
+            var rawdata = text;
+            var stats = tsvObj(rawdata);
+            stats["level"] = GetLevel(stats);
+            var data = JSON.stringify(stats);
+
+            document.getElementById("qrimage").innerHTML = "<img src='https://chart.googleapis.com/chart?chs=500x500&cht=qr&chl=" + encodeURIComponent(data) + "&chld=H'/>";
+            document.getElementById("AgentName").innerText = stats.username;
+            document.getElementById("Faction").innerText = FactionTranslation.find(e => e.AgentStats === stats.faction).Niantic;
+            document.getElementById("Faction").style.color = FactionTranslation.find(e => e.AgentStats === stats.faction).color;
+            document.getElementById("Level").innerText = stats.level;
+            document.getElementById("LifetimeAP").innerText = stats.lifetimeap.replace(/\B(?=(\d{3})+(?!\d))/g, ",");;
+            document.getElementById("CurrentAP").innerText = stats.ap.replace(/\B(?=(\d{3})+(?!\d))/g, ",");;
+            document.getElementById("Trekker").innerText = stats.trekker.replace(/\B(?=(\d{3})+(?!\d))/g, ",");;
+            document.getElementById("Recursions").innerText = stats.recursions;
+
+            // document.getElementById("rawdata").value = text;
+            // document.getElementById("data").value = data;
+            return data;
+        }
+
         function paste() {
             navigator.clipboard.readText()
                 .then(text => {
-                    var rawdata = text;
-                    var stats = tsvObj(rawdata);
-                    stats["level"] = GetLevel(stats);
-                    var data = JSON.stringify(stats);
-
-                    document.getElementById("qrimage").innerHTML = "<img src='https://chart.googleapis.com/chart?chs=500x500&cht=qr&chl=" + encodeURIComponent(data) + "&chld=H'/>";
-                    document.getElementById("AgentName").innerText = stats.username;
-                    document.getElementById("Faction").innerText = FactionTranslation.find(e => e.AgentStats === stats.faction).Niantic;
-                    document.getElementById("Faction").style.color = FactionTranslation.find(e => e.AgentStats === stats.faction).color;
-                    document.getElementById("Level").innerText = stats.level;
-                    document.getElementById("LifetimeAP").innerText = stats.lifetimeap.replace(/\B(?=(\d{3})+(?!\d))/g, ",");;
-                    document.getElementById("CurrentAP").innerText = stats.ap.replace(/\B(?=(\d{3})+(?!\d))/g, ",");;
-                    document.getElementById("Trekker").innerText = stats.trekker.replace(/\B(?=(\d{3})+(?!\d))/g, ",");;
-                    document.getElementById("Recursions").innerText = stats.recursions;
-
-                    // document.getElementById("rawdata").value = text;
-                    // document.getElementById("data").value = data;
 
                     console.log('Pasted content: ', text);
                     console.log('Processed data: ', data);
@@ -172,9 +176,14 @@
             <table border="0" align="center">
                 <tr>
                     <td align="center">
-                        <div class="button" onclick="paste()">Paste</div>
+                        <div class="button" onclick="create(document.getElementById('rawdata').value)">Create</div>
                     </td>
                 </tr>
+                <!-- <tr>
+                    <td align="center">
+                        <div class="button" onclick="paste()">Paste</div>
+                    </td>
+                </tr> -->
                 <tr>
                     <td align="center">
                         <div id="qrimage">
@@ -219,12 +228,12 @@
                         </div>
                     </td>
                 </tr>
-                <!-- <tr>
+                <tr>
                     <td align="center">
                         <textarea cols="40" rows="10" id="rawdata"></textarea>
                     </td>
                 </tr>
-                <tr>
+                <!-- <tr>
                     <td align="center">
                         <textarea cols="40" rows="10" id="data"></textarea>
                     </td>
